@@ -1,0 +1,6 @@
+{
+  "name": "SpendSavvy",
+  "description": "Track shared expenses and settle up effortlessly with friends and housemates in a sleek neumorphic interface.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
