@@ -26,33 +26,21 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Make Gradle Wrapper Executable
         run: chmod +x gradlew || true
 
-      - name: Prepare Debug Keystore
+      - name: Accept Android SDK Licenses & Prepare Keystore
         run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
           if [ ! -f "debug.keystore" ]; then
             keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
           fi
 
       - name: Run Unit Tests
-        run: |
-          if [ -f "./gradlew" ]; then
-            ./gradlew testDebugUnitTest --stacktrace
-          else
-            gradle testDebugUnitTest --stacktrace
-          fi
+        run: ./gradlew testDebugUnitTest --stacktrace
 
       - name: Build Debug APK
-        run: |
-          if [ -f "./gradlew" ]; then
-            ./gradlew assembleDebug --stacktrace
-          else
-            gradle assembleDebug --stacktrace
-          fi
+        run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload Debug APK Artifact
         uses: actions/upload-artifact@v4
